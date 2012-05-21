@@ -1,0 +1,145 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rateControl="clr-namespace:J4ni.Controls" 
+    xmlns:interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
+    xmlns:u="clr-namespace:DanielVaughan.WindowsPhone7Unleashed"
+    xmlns:converters="clr-namespace:SmartLib.Helpers"
+    x:Class="SmartLib.BooksControl"    
+    mc:Ignorable="d"
+    d:DesignHeight="480" d:DesignWidth="480"
+    x:Name="booksControl"
+    Foreground="{StaticResource DarkForegroundBrush}">
+
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:BoolToOppositeBoolConverter  x:Key="BooleanToOppositeConverter" />
+    </UserControl.Resources>
+    
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Connection Status Panel -->
+        <!-- if connection problem exists, error message (textblock) will be showed. -->
+        <!-- otherwise textblock is hidden. -->
+        <TextBlock Text="No Connection. Reload in 10 s."
+                   Visibility="{Binding ConnectionErrorOccured, 
+                        Converter={StaticResource BooleanToVisibilityConverter},
+            ConverterParameter=Visible}" FontSize="{StaticResource PhoneFontSizeMedium}" Foreground="#FFCE1010" />
+        
+        <!-- Listbox contains loaded books. -->
+        <ListBox Foreground="{StaticResource DarkForegroundBrush}" Grid.Row="1" x:Name="newBooksListBox" Margin="0,0,0,0" ItemsSource="{Binding Books, Mode=OneWay}" SelectedItem="{Binding SelectedBook, Mode=TwoWay}"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                 u:ScrollViewerMonitor.AtEndCommand="{Binding FetchMoreBooksCommand}">
+            
+            <interactivity:Interaction.Triggers>
+                <!-- Trigger is automatically executed in response to event "SelectionChanged" of control (ListBox). -->
+                <interactivity:EventTrigger EventName="SelectionChanged">
+                    <!--if event "SelectionChanged" is raised,
+                    method ShowSelectedBook() will be called -->
+                    <ec:CallMethodAction
+                                      TargetObject="{Binding}"
+                                      MethodName="ShowSelectedBook"/>
+                </interactivity:EventTrigger>
+            </interactivity:Interaction.Triggers>
+            
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            
+            <!-- This template is used for each loaded book. 
+            Following template represents one book. -->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border x:Name="itemBorder" BorderThickness="0,0,0,1.2" BorderBrush="#75af06" Padding="0,17,0,17">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <!-- Image Column -->
+                                <ColumnDefinition Width="auto"/>
+                                <!-- Book Details Column -->
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- First Column -->
+                            <Image Grid.Column="0" Width="160" Margin="4,14" Stretch="Uniform" Source="{Binding Book.CoverURL}" UseLayoutRounding="True" VerticalAlignment="Top" />
+
+                            <!-- Second Column -->
+                            <StackPanel Grid.Column="1" Margin="14,0,0,0" >
+
+                                <!-- Title (with checkbox to select item. checkbox is visible in edit mode) -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <!-- Title Column -->
+                                        <ColumnDefinition Width="*"/>
+                                        <!-- Checkbox Column -->
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <!-- Title -->
+                                    <TextBlock Text="{Binding Book.Title}" 
+                                               TextWrapping="Wrap" 
+                                               TextTrimming="WordEllipsis" 
+                                               Margin="0"
+                                               Style="{StaticResource PhoneTextExtraLargeStyle}"                                               
+                                               MaxHeight="300"
+                                               Foreground="{StaticResource DarkForegroundBrush}"/>
+
+                                    <!-- CheckBox (is visible just in edit mode) -->
+                                    <CheckBox Grid.Column="1"
+                                              IsChecked="{Binding Path=IsBookmarked, Mode=TwoWay, Converter={StaticResource BooleanToOppositeConverter}}"
+                                              BorderThickness="3"
+                                              BorderBrush="Black"
+                                              HorizontalAlignment="Right"
+                                              VerticalAlignment="Top"
+                                              Background="#FF969393" 
+                                              Visibility="{Binding Path=DataContext.IsSelectionMode, ElementName=booksControl, 
+                                                           Converter={StaticResource BooleanToVisibilityConverter}, 
+                                                           ConverterParameter=Visible}" />
+                                </Grid>
+                                
+                                <!-- Authors -->
+                                <TextBlock Text="{Binding Authors}" Margin="4,0,0,0" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMediumLarge}" Foreground="{StaticResource MediumDarkForegroundBrush}"/>
+
+                                <!-- Rating -->
+                                <StackPanel Orientation="Horizontal">
+                                    <rateControl:RateControl Margin="4,14,0,0" Background="Red" IsHitTestVisible="False" Height="32" Scale="5" Rating="{Binding Book.Rating}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <TextBlock Margin="6,0,0,0" Foreground="{StaticResource MediumDarkForegroundBrush}" VerticalAlignment="Bottom"  Height="32">
+                                        <Run Text="("/>
+                                        <Run Text="{Binding Book.RatingCount}"/>
+                                        <Run Text=")"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Loading Status Panel -->
+        <StackPanel Grid.Row="2"
+                    Visibility="{Binding Loaded, 
+                                Converter={StaticResource BooleanToVisibilityConverter},
+                                ConverterParameter=Collapsed}">
+            
+            <TextBlock Text="Loading..." 
+                       FontSize="{StaticResource PhoneFontSizeMediumLarge}"
+                       Foreground="{StaticResource DarkForegroundBrush}"/>
+            
+            <ProgressBar IsIndeterminate="True"
+                         VerticalAlignment="Bottom"
+                         Grid.Row="1" 
+                         HorizontalContentAlignment="Stretch"
+                         Foreground="{StaticResource DarkForegroundBrush}"
+                         Background="{StaticResource DarkForegroundBrush}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
