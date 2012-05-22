@@ -220,7 +220,10 @@ namespace SmartLib.ViewModels
                     }
 
                     int ratingCount = ratings.Sum();
-                    average = average / ratingCount;
+                    if (ratingCount > 0)
+                    {
+                        average = average / ratingCount;
+                    }
 
                     this.Rating = (uint)average;
                     this.RatingCount = (uint)ratingCount;

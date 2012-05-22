@@ -67,6 +67,16 @@ namespace SmartLib.DataManagers
         }
 
         /// <summary>
+        /// Creaters URL used to log user out.
+        /// </summary>
+        /// <returns>URL used to log user out</returns>
+        private string CreateLogOutURL()
+        {
+            return string.Format("http://{0}/api/user/logout",
+                ServerAddress);
+        }
+
+        /// <summary>
         /// Sends request to change password.
         /// </summary>
         /// <param name="uco">user uco</param>
@@ -109,6 +119,19 @@ namespace SmartLib.DataManagers
             var postData = string.Format("uco={0}&password={1}", uco, password);
 
             return await RequestManager.SendPostRequestAsync(url, postData);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uco"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public async Task<HttpStatusCode> LogOut()
+        {
+            string url = CreateLogOutURL();
+
+            return await RequestManager.SendPostRequestAsync(url, null);
         }
 
         /// <summary>

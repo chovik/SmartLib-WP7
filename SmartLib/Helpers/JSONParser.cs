@@ -26,8 +26,8 @@ namespace SmartLib.Helpers
         /// <returns>object of specified type parsed from JSON data</returns>
         public static async Task<T> ParseDataAsync<T>(string json)
         {
-            if (json == null)
-                throw new ArgumentNullException("json");
+            //if (json == null)
+            //    throw new ArgumentNullException("json");
 
             Debug.WriteLine("Parsing data. JSON:\n {0}\n", json);
 

@@ -148,7 +148,7 @@
             <wpe:AdvancedApplicationBarMenuItem Text="Log In"
                                                 Command="{Binding LoginCommand}"
                                                 x:Name="logInMenuItem"
-                                                Visibility="{Binding Path=IsSelectionMode,
+                                                Visibility="{Binding Path=IsLoggedIn,
                                                             Converter={StaticResource BooleanToVisibilityConverter}, 
                                                             ConverterParameter=Collapsed}"/>
 

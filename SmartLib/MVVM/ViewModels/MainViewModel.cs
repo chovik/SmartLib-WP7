@@ -16,6 +16,7 @@ using SmartLib.Models;
 using System.Windows.Navigation;
 using System.Runtime.Serialization;
 using System.Linq;
+using System.Net;
 
 
 namespace SmartLib.ViewModels
@@ -31,10 +32,12 @@ namespace SmartLib.ViewModels
             SearchCommand = new RelayCommand(() => GoToSearchPage());
             RegisterCommand = new RelayCommand(() => GoToRegistrationPage());
             LoginCommand = new RelayCommand(() => GoToLoginPage());
+            LogOutCommand = new RelayCommand(() => LogOut());
             SelectionModeCommand = new RelayCommand(() => SwitchSelectionMode());
             RemoveSelectedCommand = new RelayCommand(() => RemoveSelectedFavourites());
             SettingsCommand = new RelayCommand(() => GoToSettingsPage());
             ChangePasswordCommand = new RelayCommand(() => GoToChangePasswordPage());
+            App.CurrentApplication.LoginChanged += (s,e) => OnNotifyPropertyChanged("IsLoggedIn");
         }
 
         /// <summary>
@@ -50,6 +53,15 @@ namespace SmartLib.ViewModels
         /// If command is executed, GoToLoginPage method will be called.
         /// </summary>
         public RelayCommand LoginCommand
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// If command is executed, LogOut method will be called.
+        /// </summary>
+        public RelayCommand LogOutCommand
         {
             get;
             private set;
@@ -140,6 +152,43 @@ namespace SmartLib.ViewModels
         {
             var root = Application.Current.RootVisual as Frame;
             root.Navigate(new Uri("/MVVM/Views/ChangePasswordPage.xaml", UriKind.Relative));
+        }
+
+        public async void LogOut()
+        {
+            HttpStatusCode statusCode = await App.CurrentApplication.UserRequestManager.LogOut();
+
+            switch (statusCode)
+            {
+                case HttpStatusCode.OK:
+                    App.CurrentApplication.MessageService.ShowSuccessMessage("You have been successfully logged out.", "Log Out");
+                    IsLoggedIn = false;
+                    break;
+                default:
+                    App.CurrentApplication.MessageService.ShowErrorMessage("Error occured during log out operation.", "Log Out");
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets a value indicating whether user is logged in.
+        /// True if user is logged in. Otherwise false.
+        /// </summary>
+        public bool IsLoggedIn
+        {
+            get
+            {
+                return App.CurrentApplication.LoggedIn;
+            }
+            set
+            {
+                if (value != App.CurrentApplication.LoggedIn)
+                {
+                    App.CurrentApplication.LoggedIn = value;
+                    OnNotifyPropertyChanged("IsLoggedIn");
+                }
+            }
         }
 
         /// <summary>

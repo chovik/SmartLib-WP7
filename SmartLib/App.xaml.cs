@@ -43,7 +43,7 @@ namespace SmartLib
             set 
             { 
                 loggedIn = value; 
-                OnLoginChanged(new LoginChangedEventArgs(value));
+                OnLoginChanged(value);
             }
         }
 
@@ -58,11 +58,11 @@ namespace SmartLib
 
         public event EventHandler<LoginChangedEventArgs> LoginChanged;
 
-        protected virtual void OnLoginChanged(LoginChangedEventArgs e)
+        protected virtual void OnLoginChanged(bool isLoggedIn)
         {
             var errorEvent = LoginChanged;
             if (errorEvent != null)
-                errorEvent(this, e);
+                errorEvent(this, new LoginChangedEventArgs(isLoggedIn));
         }
 
         public static App CurrentApplication 

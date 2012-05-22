@@ -110,6 +110,7 @@ namespace SmartLib.DataManagers
                     Debug.WriteLine(response.Headers["Set-Cookie"]);
                 }
 
+                //time synchronization. it is important for relativetime convertor. future time is not supported.
                 if (response.Headers.AllKeys.Contains("Date"))
                 {
                     string serverDateString = response.Headers["Date"];
@@ -146,12 +147,12 @@ namespace SmartLib.DataManagers
             WebRequest webRequest = WebRequest.CreateHttp(newUrl);
 
             ///send request and wait for response
-            Debug.WriteLine("GET - Waiting for server response {0}.", url);
+            Debug.WriteLine("GET - Waiting for server response {0}.", newUrl);
             using (WebResponse response = await webRequest.GetResponseAsync())
             {
                 HttpStatusCode statusCode = WebResponseToHTTPStatusCode(response);
 
-                Debug.WriteLine("GET - status code {0} ({1}).", statusCode, url);
+                Debug.WriteLine("GET - status code {0} ({1}).", statusCode, newUrl);
 
                 ///if received status code is OK, try to get content of response
                 if (statusCode == HttpStatusCode.OK)

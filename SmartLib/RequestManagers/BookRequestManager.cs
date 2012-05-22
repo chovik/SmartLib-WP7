@@ -73,7 +73,7 @@ namespace SmartLib
         /// <returns>URL used to receive book details</returns>
         private string CreateBookURL(BookIdentifier identifierKind, string identifierValue)
         {
-            return string.Format("http://{0}/api/books/?{1}={2}",
+            return string.Format("http://{0}/api/books?{1}={2}",
                 ServerAddress,
                 BookIdentifierToStringDictionary[identifierKind],
                 identifierValue);

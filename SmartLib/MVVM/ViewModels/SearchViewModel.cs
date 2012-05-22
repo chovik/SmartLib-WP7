@@ -176,9 +176,12 @@ namespace SmartLib.ViewModels
 
                                 if (book != null)
                                 {
-                                    var root = Application.Current.RootVisual as Frame;
-                                    root.DataContext = new BookViewModel(book);
-                                    root.Navigate(new Uri("/MVVM/Views/BookPage.xaml", UriKind.Relative));
+                                    Deployment.Current.Dispatcher.BeginInvoke(() =>
+                                        {
+                                            var root = Application.Current.RootVisual as Frame;
+                                            root.DataContext = new BookViewModel(book);
+                                            root.Navigate(new Uri("/MVVM/Views/BookPage.xaml", UriKind.Relative));
+                                        });
                                 }
                                 else
                                 {
@@ -187,19 +190,24 @@ namespace SmartLib.ViewModels
                                     int sum = 0;
                                     for (int i = 0; i < 9; i++)
                                     {
-                                        sum += Convert.ToInt16(isbn10[i]) * (10 - i);
+                                        char numberChar = isbn10[i];
+                                        int numberInt = Convert.ToInt16(numberChar.ToString());
+                                        sum += numberInt * (10 - i);
                                     }
 
                                     isbn10 += 11 - (sum % 11);
 
                                     Debug.WriteLine("ISBN10 complete: {0}", isbn10);
 
-                                    book = await App.CurrentApplication.BookRequestManager.GetBookBy(BookIdentifier.Isbn, result.Text);
+                                    book = await App.CurrentApplication.BookRequestManager.GetBookBy(BookIdentifier.Isbn, isbn10);
                                     if (book != null)
                                     {
-                                        var root = Application.Current.RootVisual as Frame;
-                                        root.DataContext = new BookViewModel(book);
-                                        root.Navigate(new Uri("/MVVM/Views/BookPage.xaml", UriKind.Relative));
+                                        Deployment.Current.Dispatcher.BeginInvoke(() =>
+                                        {
+                                            var root = Application.Current.RootVisual as Frame;
+                                            root.DataContext = new BookViewModel(book);
+                                            root.Navigate(new Uri("/MVVM/Views/BookPage.xaml", UriKind.Relative));
+                                        });
                                     }
                                     else
                                     {
