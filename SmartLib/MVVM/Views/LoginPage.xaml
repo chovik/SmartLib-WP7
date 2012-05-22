@@ -28,7 +28,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
-            <StackPanel Name="grid1" VerticalAlignment="Center">
+            <StackPanel>
                 <!--<Grid.RowDefinitions>
                     <RowDefinition Height="64"/>
                     <RowDefinition Height="74"/>
@@ -41,7 +41,7 @@
                 <TextBlock Grid.Row="0" Text="UČO:" FontSize="40" VerticalAlignment="Stretch" FontStretch="Normal" />
                 <TextBox Grid.Row="1"  Text="{Binding Mode=TwoWay, Path=Uco, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}"  Style="{StaticResource ValidationControlStyle}" Name="titleTextBox" InputScope="Number"/>
                 <TextBlock Grid.Row="2" Text="Password:" FontSize="40" VerticalAlignment="Stretch" FontStretch="Normal" />
-                <PasswordBox Grid.Row="3" Password="{Binding Password, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" Style="{StaticResource DefaultValidationTextBox}"/>
+                <PasswordBox Grid.Row="3" Password="{Binding Password, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" Style="{StaticResource ValidationControlStyle}"/>
                 <CheckBox Background="#a2dc37" Margin="0,24"  HorizontalAlignment="Right" IsChecked="{Binding SavePassword, Mode=TwoWay}">
                     <CheckBox.Content>
                         <TextBlock Text="save password"

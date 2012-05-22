@@ -40,8 +40,8 @@
                 <TextBlock Style="{StaticResource DefaultTextBlock}"
                            Grid.Row="0"
                            Text="Title:"/>
-                
-                <toolkit:AutoCompleteBox TextBoxStyle="{StaticResource DefaultValidationTextBox}"
+
+                <toolkit:AutoCompleteBox TextBoxStyle="{StaticResource ValidationControlStyle}"
                                          Grid.Row="1"
                                          ItemsSource="{Binding SearchedTitles}"                                         
                                          Text="{Binding Title, Mode=TwoWay}"/>
@@ -49,8 +49,8 @@
                 <TextBlock Style="{StaticResource DefaultTextBlock}"
                            Grid.Row="2"
                            Text="Author:"/>
-                
-                <toolkit:AutoCompleteBox TextBoxStyle="{StaticResource DefaultValidationTextBox}"
+
+                <toolkit:AutoCompleteBox TextBoxStyle="{StaticResource ValidationControlStyle}"
                                          Grid.Row="3"
                                          ItemsSource="{Binding SearchedAuthors}"                                         
                                          Text="{Binding Author, Mode=TwoWay}"/>
@@ -58,8 +58,8 @@
                 <TextBlock Style="{StaticResource DefaultTextBlock}"
                            Grid.Row="4"
                            Text="ISBN:"/>
-                
-                <toolkit:AutoCompleteBox TextBoxStyle="{StaticResource DefaultValidationTextBox}"
+
+                <toolkit:AutoCompleteBox TextBoxStyle="{StaticResource ValidationControlStyle}"
                                          Grid.Row="5"
                                          ItemsSource="{Binding SearchedIsbns}"                                         
                                          Text="{Binding Isbn, Mode=TwoWay}"/>

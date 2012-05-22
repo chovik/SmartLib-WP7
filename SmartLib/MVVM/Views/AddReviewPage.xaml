@@ -42,7 +42,7 @@
                 <TextBlock Grid.Row="0" Text="Rating:" FontSize="40" VerticalAlignment="Stretch" FontStretch="Normal" />
                 <rateControl:RateControl HorizontalContentAlignment="Center" Height="74" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,4" Scale="5" Rating="{Binding Rating, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}"/>
                 <TextBlock Grid.Row="2" Text="Text:" FontSize="40" VerticalAlignment="Stretch" FontStretch="Normal" />
-                <TextBox TextWrapping="Wrap" Grid.Row="3" Style="{StaticResource DefaultValidationTextBox}" Text="{Binding Text, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" Name="authorTextBox" VerticalAlignment="Stretch" Height="300"/>
+                <TextBox TextWrapping="Wrap" Grid.Row="3" Style="{StaticResource ValidationControlStyle}" Text="{Binding Text, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" Name="authorTextBox" VerticalAlignment="Stretch" Height="300"/>
             </StackPanel>
             <Button Style="{StaticResource DefaultButton}" Grid.Row="1" Content="Save" Command="{Binding SaveReviewCommand}"/>
         </Grid>

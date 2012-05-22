@@ -94,6 +94,13 @@ namespace SmartLib.ViewModels
         public LoginViewModel(string nextPageURI)
         {
             this.validator.AddValidationFor(() => this.Uco).Must(() => this.uco.Count() > 0).Show("Enter the UČO");
+            this.validator.AddValidationFor(() => this.Uco)
+                .Must(() =>
+                {
+                    int parsedUCO = -1;
+                    int.TryParse(this.Uco, out parsedUCO);
+                    return parsedUCO > 0;
+                }).Show("Invalid UČO format.\nUČO must be unsignd integer.");
            // this.validator.AddValidationFor(() => this.Uco).Must(() => Convert.this.uco.Count() > 0).Show("Inalid format.");
             this.validator.AddValidationFor(() => this.Password).NotEmpty().Show("Enter the password");
             LoginCommand = new RelayCommand(() => Login());

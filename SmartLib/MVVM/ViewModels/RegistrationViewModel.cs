@@ -22,12 +22,12 @@ namespace SmartLib.ViewModels
             private set;
         }
 
-        private uint uco;
+        private string uco;
 
         /// <summary>
         /// Uco.
         /// </summary>
-        public uint Uco
+        public string Uco
         {
             get { return uco; }
             set 
@@ -81,6 +81,16 @@ namespace SmartLib.ViewModels
         /// </summary>
         public RegistrationViewModel()
         {
+            this.validator.AddValidationFor(() => this.Uco).Must(() => !string.IsNullOrWhiteSpace(this.Uco)).Show("Enter the UČO");
+            this.validator.AddValidationFor(() => this.Uco)
+                .Must(() =>
+                {
+                    int parsedUCO = -1;
+                    int.TryParse(this.Uco, out parsedUCO);
+                    return parsedUCO > 0;
+                }).Show("Invalid UČO format.\nUČO must be unsigned integer.");
+            this.validator.AddValidationFor(() => this.FirstName).NotEmpty().Show("Enter the first name");
+            this.validator.AddValidationFor(() => this.LastName).NotEmpty().Show("Enter the last name");
             SendRegistrationCommand = new RelayCommand(() => SendRegistration());
         }
 
@@ -126,25 +136,25 @@ namespace SmartLib.ViewModels
         /// </summary>
         public async void SendRegistration()
         {
-            if (this.ValidateInputs())
-            {
-                HttpStatusCode statusCode = await App.CurrentApplication.UserRequestManager.RegisterNewUser(Uco, FirstName, LastName);
+            if (!this.ValidateAll())
+                return;
 
-                switch (statusCode)
-                {
-                    case HttpStatusCode.OK:
-                        App.CurrentApplication.MessageService.ShowSuccessMessage("Registration was successful.", "Registration");
-                        break;
-                    case HttpStatusCode.BadRequest:
-                        App.CurrentApplication.MessageService.ShowErrorMessage("Student with filled UCO does not exists", "Registration");
-                        break;
-                    case HttpStatusCode.Conflict:
-                        App.CurrentApplication.MessageService.ShowErrorMessage("User with the same UCO already exists.", "Registration");
-                        break;
-                    default:
-                        Debug.WriteLine("Unxpected Status Code '{0}'.", statusCode);
-                        break;
-                }
+            HttpStatusCode statusCode = await App.CurrentApplication.UserRequestManager.RegisterNewUser(Convert.ToUInt32(Uco), FirstName, LastName);
+
+            switch (statusCode)
+            {
+                case HttpStatusCode.OK:
+                    App.CurrentApplication.MessageService.ShowSuccessMessage("Registration was successful.", "Registration");
+                    break;
+                case HttpStatusCode.BadRequest:
+                    App.CurrentApplication.MessageService.ShowErrorMessage("Student with filled UCO does not exists", "Registration");
+                    break;
+                case HttpStatusCode.Conflict:
+                    App.CurrentApplication.MessageService.ShowErrorMessage("User with the same UCO already exists.", "Registration");
+                    break;
+                default:
+                    Debug.WriteLine("Unxpected Status Code '{0}'.", statusCode);
+                    break;
             }
         }
         

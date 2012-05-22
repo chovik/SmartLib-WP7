@@ -6,7 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False"
     Style="{StaticResource DefaultPhonePageStyle}"
     xmlns:smartLib="clr-namespace:SmartLib">
@@ -24,25 +24,19 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Grid  Margin="0,50,0,0" Name="grid1" VerticalAlignment="Stretch">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="64"/>
-                    <RowDefinition Height="74"/>
-                    <RowDefinition Height="64"/>
-                    <RowDefinition Height="74"/>
-                    <RowDefinition Height="64"/>
-                    <RowDefinition Height="74"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="100"/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Text="UČO:" FontSize="40" VerticalAlignment="Stretch" FontStretch="Normal" />
-                <TextBox Grid.Row="1" Style="{StaticResource DefaultValidationTextBox}" Text="{Binding Mode=TwoWay, Path=Uco, StringFormat=\{0:F0\}}" Name="titleTextBox"/>
-                <TextBlock Grid.Row="2" Text="First Name:" FontSize="40" VerticalAlignment="Stretch" FontStretch="Normal" />
-                <TextBox Grid.Row="3" Style="{StaticResource DefaultValidationTextBox}" Text="{Binding FirstName, Mode=TwoWay}" Name="authorTextBox"/>
-                <TextBlock Grid.Row="4" Text="Last Name:" FontSize="40" VerticalAlignment="Stretch" FontStretch="Normal" />
-                <TextBox Grid.Row="5" Style="{StaticResource DefaultValidationTextBox}" Text="{Binding LastName, Mode=TwoWay}" Name="isbnTextBox" />
-                <Button Style="{StaticResource DefaultButton}" Grid.Row="7" Content="Sign up" Command="{Binding SendRegistrationCommand}"/>
-            </Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+            <StackPanel  Name="grid1" VerticalAlignment="Center">
+                <TextBlock Text="UČO:" FontSize="40" VerticalAlignment="Stretch" FontStretch="Normal" />
+                <TextBox Style="{StaticResource ValidationControlStyle}" Text="{Binding Mode=TwoWay, Path=Uco, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" Name="titleTextBox" InputScope="Number"/>
+                <TextBlock Text="First Name:" FontSize="40" VerticalAlignment="Stretch" FontStretch="Normal" />
+                <TextBox Style="{StaticResource ValidationControlStyle}" Text="{Binding FirstName, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" Name="authorTextBox"/>
+                <TextBlock Text="Last Name:" FontSize="40" VerticalAlignment="Stretch" FontStretch="Normal" />
+                <TextBox Style="{StaticResource ValidationControlStyle}" Text="{Binding LastName, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" Name="isbnTextBox" />
+            </StackPanel>
+            <Button Style="{StaticResource DefaultButton}" Grid.Row="1" Content="Sign up" Command="{Binding SendRegistrationCommand}"/>
         </Grid>
     </Grid>
  

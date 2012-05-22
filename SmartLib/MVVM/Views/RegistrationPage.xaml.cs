@@ -33,7 +33,15 @@ namespace SmartLib
         public RegistrationPage()
         {
             isNewPageInstance = true;
-            InitializeComponent();
+            InitializeComponent(); 
+            this.BindingValidationError += LoginPage_BindingValidationError;
+        }
+
+        private void LoginPage_BindingValidationError(object sender, ValidationErrorEventArgs e)
+        {
+            var state = e.Action == ValidationErrorEventAction.Added ? "Invalid" : "Valid";
+
+            VisualStateManager.GoToState((Control)e.OriginalSource, state, false);
         }
 
         protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
